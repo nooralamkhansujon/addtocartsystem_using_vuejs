@@ -23,7 +23,6 @@ export default {
   props:['items'],
   computed:{
      totalPrice(){
-        console.log(this.items);
         var total = 0;
         this.items.forEach(item=>{
              total += parseFloat(item.price);
