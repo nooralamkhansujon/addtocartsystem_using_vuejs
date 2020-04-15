@@ -1,80 +1,65 @@
 <template>
   <div id="app">
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-          <a class="navbar-brand" href="#">Super Store</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
+<!--
+       <router-link :to="{path: '/'}">Home</router-link>
+       <router-link :to="{path: '/test/1'}">Test</router-link>
+       <router-link :to="{path: '/test/2'}">Test</router-link>
+       <router-link :to="{path: '/test/3'}">Test</router-link>
+       <router-view></router-view> -->
 
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2"
-                type="search"  placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-              </form>
-          </div>
-      </nav>
 
+       <Navbar  @search="search"></Navbar>
       <!-- start of row  -->
       <div class="container mt-3">
-          <div class="row">
-              <div class="col-sm-9">
-
-              <div class="row">
-                 <!-- start of cart  -->
-                <div class="card col-md-4" style="width: 18rem;">
-                    <div class="card-body">
-                      <h5 class="card-title">Card title</h5>
-                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                      <a href="#" class="btn btn-primary">Go somewhere</a>
-                    </div>
-                </div>
-                <!-- end of cart  -->
-
-                <!-- start of cart  -->
-                <div class="card col-md-4" style="width: 18rem;">
-                    <div class="card-body">
-                      <h5 class="card-title">Card title</h5>
-                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                      <a href="#" class="btn btn-primary">Go somewhere</a>
-                    </div>
-                </div>
-                <!-- end of cart  -->
-
-                <!-- start of cart  -->
-                <div class="card col-md-4" style="width: 18rem;">
-                    <div class="card-body">
-                      <h5 class="card-title">Card title</h5>
-                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                      <a href="#" class="btn btn-primary">Go somewhere</a>
-                    </div>
-                </div>
-                <!-- end of cart  -->
-              </div>
-
-              </div>
-              <div class="col-sm-3">
-                    <ul class="list-group">
-                       <li class="list-group-item">
-                           Item - Price
-                       </li>
-                       <li class="list-group-item">
-                           Item - Price
-                       </li>
-                       <li class="list-group-item">
-                           Item - Price
-                       </li>
-                    </ul>
-              </div>
+        <div class="row">
+           <div class="col-md-9 col-sm-12">
+              <!-- <Inventory @newItemAdded="addCartItem" :items="items"></Inventory> -->
+              <router-view @newItemAdded="addCartItem" :items="items"></router-view>
+          </div>
+          <div class="col-md-3 col-sm-12">
+            <Cart @removeItem="removeItem" :items="cart"></Cart>
           </div>
       </div>
-      <!-- end of row  -->
+    </div>
   </div>
+  <!-- end of row  -->
 </template>
 
+
 <script>
+import Navbar from './components/Navbar.vue';
+import Cart from './components/Cart.vue';
+import data from './data.js';
+
 export default {
-  name: 'App'
+  name: 'App',
+  components:{
+     Navbar,
+     Cart
+  },
+  data(){
+     return {
+        items:[],
+        cart:[],
+     }
+  },
+  methods:{
+     addCartItem(item){
+       item.price  = item.price.replace(/\$/,'');
+       this.cart.push(item);
+     },
+     removeItem(index){
+        this.cart.splice(index,1);
+     },
+     search(keyword){
+         this.items = data.filter(item=>{
+            return  item.title.toLowerCase().indexOf(keyword.toLowerCase()) !== -1;
+         });
+     }
+  },
+  mounted(){
+    this.items = data;
+  }
 }
 </script>
 
