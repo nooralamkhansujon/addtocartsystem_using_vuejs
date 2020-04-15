@@ -1,16 +1,18 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import ItemDetails from '@/components/views/ItemDetails.vue'
+import Test from '@/components/views/Test.vue';
+import Inventory from '@/components/views/Inventory.vue';
 
-Vue.use(Router)
-
-export default new Router({
-  routes: [
+export const routes=[
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
-    }
-  ],
-  mode:'history'
-})
+      component: Test
+    },
+    {
+      path:"/products",
+      component:Inventory
+    },
+    {
+      path:'/product/:id',
+      component:ItemDetails
+    },
+];
